@@ -4,7 +4,7 @@ import { Poppins_200ExtraLight, Poppins_500Medium } from "@expo-google-fonts/pop
 import { useFonts } from 'expo-font';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 
-export default function Button ({styleButton, handleAction}) {
+export default function Button ({label, styleButton, handleAction}) {
 
     const [fontLoaded] = useFonts({
       Poppins_500Medium,
@@ -16,7 +16,7 @@ export default function Button ({styleButton, handleAction}) {
             <TouchableOpacity
                 onPress={handleAction}
                 style={styleButton.shape_button}>
-                <Text style={styleButton.label_button}>Regresar</Text>
+                <Text style={styleButton.label_button}>{label}</Text>
             </TouchableOpacity>
         </View>
     )
