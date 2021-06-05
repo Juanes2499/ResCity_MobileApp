@@ -3,6 +3,7 @@ import {SafeAreaView, StyleSheet, Text, View, TextInput , Platform} from 'react-
 import Button from '../../Componentes/Button/Button';
 import { Poppins_300Light, Poppins_400Regular, Poppins_500Medium, Poppins_700Bold } from "@expo-google-fonts/poppins";
 import {InputBox} from '../../Componentes/Input/Input';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
 
 import PropTypes from "prop-types";
 import { withRouter } from "react-router";
@@ -44,7 +45,6 @@ const style_input_box = {
     height: 40,
     borderWidth: 1,
     borderColor: '#67686D',
-    fontFamily:'Poppins_400Regular',
     fontSize: 17,
     color: '#535871'
   }
@@ -71,6 +71,21 @@ const style_button_date = {
 }
 
 class DatosScreen extends React.Component {
+
+  componentDidMount = async() => {
+
+    try {
+      await Font.loadAsync({
+        Poppins_300Light,
+        Poppins_400Regular,
+        Poppins_500Medium,
+        Poppins_700Bold,
+      })
+      this.setState({ fontLoaded: true });
+    } catch (error) {
+      console.log('error loading fonts', error);
+    }
+  }
 
   state = {
     text: '',
@@ -103,12 +118,6 @@ class DatosScreen extends React.Component {
         hours_24: false,
         valueState: new Date(1598051730000),
         mode:'date',
-        // handlerValueState: (data) =>{
-        //   let Emt_state = this.state.formFilter;
-        //   Emt_state[2].valueState = data;
-        //   this.setState({formFilter: Emt_state});
-        //   console.log(data)
-        // }
         show: false,
         handlerValueState: (event, selectedDate) => {
           const currentDate = selectedDate || Emt_state[2].valueState;
@@ -128,26 +137,11 @@ class DatosScreen extends React.Component {
     this.setState({text: data})
   }
 
-  componentDidMount = async() => {
-
-    try {
-      await Font.loadAsync({
-        Poppins_300Light,
-        Poppins_400Regular,
-        Poppins_500Medium,
-        Poppins_700Bold,
-      })
-      this.setState({ fontLoaded: true });
-    } catch (error) {
-      console.log('error loading fonts', error);
-    }
-  }
-
-
   render() {
 
     const { match, location, history } = this.props;
     return (
+      <KeyboardAwareScrollView>
       <View style={styles.container}>
 
         {/* <View style={{felex: 1, flexDirection: 'row'}}>
@@ -184,7 +178,7 @@ class DatosScreen extends React.Component {
         </View>
 
         <View style={{width: '100%', display:'flex', alignContent:'center'}}>
-          <SafeAreaView>
+          
             <InputBox
               style={style_input_box}
               elements={this.state.formFilter}
@@ -198,10 +192,11 @@ class DatosScreen extends React.Component {
                 this.setState({formFilter: Emt_state});
               }}
             />
-          </SafeAreaView>
+          
         </View>
-
+              
       </View>
+      </KeyboardAwareScrollView>
     );
   }
 }
@@ -222,6 +217,11 @@ const styles = StyleSheet.create({
     fontFamily: "Poppins_700Bold",
     color: "#2F43A6",
     fontSize: 35,
-
   },
+  container_scroll_view: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 30
+  }
 });
