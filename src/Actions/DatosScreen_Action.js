@@ -7,7 +7,8 @@ export const DatosNodoSensorAction_ConsultarDatos = (json) => {
         "seleccionar":"",
         "condicion": json ? json : {},
         "agrupar":"",
-        "ordenar":""
+        "ordenar":"",
+        "limite": "5"
     }
 
     const endpoint = 'http://192.168.0.17:3010/api/datosNodoSensor/get'

@@ -99,12 +99,22 @@ const style_button_consultar = {
 
 const style_card = {
   container: {
-    width: '100%'
+    width: '100%',
+    borderWidth: 2,
+    borderRadius: 5,
+    borderColor: '#2F43A6',
+    marginTop:'10%',
+    padding:5
+  },
+  key: {
+    fontFamily: 'Poppins_500Medium',
+    color: "#2F43A6",
+    fontSize: 12
   },
   value: {
-      fontFamily: 'Poppins_300Light',
-      color: "#000",
-      fontSize: 12
+    fontFamily: 'Poppins_300Light',
+    color: "#040555",
+    fontSize: 12
   }
 }
 
