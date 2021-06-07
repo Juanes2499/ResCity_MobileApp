@@ -8,6 +8,11 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
 import PropTypes from "prop-types";
 import { withRouter } from "react-router";
 
+//Actions
+import { 
+  DatosNodoSensorAction_ConsultarDatos
+} from '../../Actions/DatosScreen_Action';
+
 
 const style_button_return = {
   shape_button: {
@@ -70,6 +75,27 @@ const style_button_date = {
   }
 }
 
+const style_button_consultar = {
+  shape_button: {
+    display:'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: "100%",
+    borderRadius: 10,
+    backgroundColor: "#32EC7C",
+    paddingLeft: "2%",
+    paddingRight: "2%",
+    paddingTop: "2%",
+    paddingBottom: "2%",
+    marginTop: '10%'
+  },
+  label_button: {
+      fontFamily: 'Poppins_500Medium',
+      color: "#F2F2F2",
+      fontSize: 15
+  }
+}
+
 class DatosScreen extends React.Component {
 
   componentDidMount = async() => {
@@ -89,8 +115,10 @@ class DatosScreen extends React.Component {
 
   state = {
     text: '',
+    data: [],
     formFilter: [
       {
+        name: 'ID_NODO_SENSOR',
         label: 'ID Nodo Sensor',
         type: 'input',
         valueState: '',
@@ -102,6 +130,7 @@ class DatosScreen extends React.Component {
         }
       },
       {
+        name: 'NOMBRE_VARIABLE',
         label: 'Variable Nodo Sensor',
         valueState: '',
         type: 'input',
@@ -113,14 +142,15 @@ class DatosScreen extends React.Component {
         }
       },
       {
+        name: "FECHA_CREACION",
         label: 'Fecha Reporte',
         type: 'date',
         hours_24: false,
-        valueState: new Date(1598051730000),
+        valueState: new Date(),
         mode:'date',
         show: false,
         handlerValueState: (event, selectedDate) => {
-          const currentDate = selectedDate || Emt_state[2].valueState;
+          const currentDate = selectedDate; //|| Emt_state[2].valueState;
           let Emt_state = this.state.formFilter;
           Emt_state[2].valueState = currentDate;
           Emt_state[2].show = false;
@@ -142,11 +172,28 @@ class DatosScreen extends React.Component {
     const { match, location, history } = this.props;
     return (
       <KeyboardAwareScrollView>
-      <View style={styles.container}>
+        <View style={styles.container}>
 
-        {/* <View style={{felex: 1, flexDirection: 'row'}}>
+          {/* <View style={{felex: 1, flexDirection: 'row'}}>
+            <View  style={{width: "27%"}}>
+              <Button
+                styleButton = {style_button_return}
+                handleAction = {() => {
+                  history.push("/")
+                }}
+              />
+            </View>
+
+            <View  style={{width: 300, display:'flex', justifyContent:'center'}}>
+              <Text style={styles.titulo}>
+                Tabla de datos
+              </Text>
+            </View>
+          </View> */}
+
           <View  style={{width: "27%"}}>
             <Button
+              label = {'Regresar'}
               styleButton = {style_button_return}
               handleAction = {() => {
                 history.push("/")
@@ -154,48 +201,80 @@ class DatosScreen extends React.Component {
             />
           </View>
 
-          <View  style={{width: 300, display:'flex', justifyContent:'center'}}>
+          <View  style={{width: "100%"}}>
             <Text style={styles.titulo}>
-              Tabla de datos
+              Filtro de datos
             </Text>
           </View>
-        </View> */}
 
-        <View  style={{width: "27%"}}>
+          <View style={{width: '100%', display:'flex', alignContent:'center'}}>
+            
+              <InputBox
+                style={style_input_box}
+                elements={this.state.formFilter}
+              />
+              <Button
+                label = {'Seleccionar Fecha'}
+                styleButton = {style_button_date}
+                handleAction = {() => {
+                  let Emt_state = this.state.formFilter;
+                  Emt_state[2].show = true;
+                  this.setState({formFilter: Emt_state});
+                }}
+              />
+            
+          </View>
+
           <Button
-            label = {'Regresar'}
-            styleButton = {style_button_return}
+            label = {'Consultar Datos'}
+            styleButton = {style_button_consultar}
             handleAction = {() => {
-              history.push("/")
+
+              let dataJsonObject = {}
+                
+              let newFormFilter = this.state.formFilter;
+              
+              let i = 0;
+              newFormFilter.forEach(x => {
+                  if(x.valueState !== ''){
+
+                      let valor_cond = '';
+                      if( x.name === 'FECHA_CREACION'){
+                        let anio = x.valueState.getFullYear()
+                        let mes = x.valueState.getMonth()+1
+                        mes = mes.toString().padStart(2, '0')
+                        let dia = x.valueState.getDate()
+                        dia = dia.toString().padStart(2, '0')
+                        valor_cond = `${anio}-${mes}-${dia}`
+                        console.log(valor_cond)
+                      }else if ( x.name !== 'FECHA_CREACION'){
+                        valor_cond = x.valueState
+                      }
+
+                      dataJsonObject[`${x.name}`] = {
+                          conector_logico: i === 0 ? '' : "AND",
+                          operador: 'LIKE',
+                          valor_condicion: `%${valor_cond}%`
+                      }
+                      i += 1;
+                  }
+              })
+          
+              DatosNodoSensorAction_ConsultarDatos(dataJsonObject)
+                  .then(result => {
+                      this.setState({data: result.data.map((a, indice) => ({ ...a, id: indice + 1 }))})
+                      console.log(this.state.data)
+                  }).catch((err) => {
+                      alert('No existen conincidencias con las condiciones establecidas en los parámetros.')
+                  })
             }}
           />
-        </View>
 
-        <View  style={{width: "100%"}}>
-          <Text style={styles.titulo}>
-            Filtro de datos
-          </Text>
-        </View>
+          <View>
 
-        <View style={{width: '100%', display:'flex', alignContent:'center'}}>
-          
-            <InputBox
-              style={style_input_box}
-              elements={this.state.formFilter}
-            />
-            <Button
-              label = {'Seleccionar Fecha'}
-              styleButton = {style_button_date}
-              handleAction = {() => {
-                let Emt_state = this.state.formFilter;
-                Emt_state[2].show = true;
-                this.setState({formFilter: Emt_state});
-              }}
-            />
-          
+          </View>
+                
         </View>
-              
-      </View>
       </KeyboardAwareScrollView>
     );
   }
