@@ -4,6 +4,7 @@ import { StyleSheet, Text, View, ActivityIndicator} from 'react-native';
 import { Poppins_300Light, Poppins_500Medium, Poppins_700Bold } from "@expo-google-fonts/poppins";
 import * as Font from 'expo-font';
 import image from '../../Imagenes/Analisis_datos.jpg'
+import img_grafica from '../../Imagenes/grafica_datos.png';
 
 import PropTypes from "prop-types";
 import { withRouter } from "react-router";
@@ -53,6 +54,14 @@ class App extends React.Component {
         img: image,
         handleAction: () =>{
           history.push("/DatosScreen")
+        }
+      },
+      { 
+        id: '2', 
+        label: 'Gráfica de datos', 
+        img: img_grafica,
+        handleAction: () =>{
+          history.push("/GraficosScreen")
         }
       },
     ]

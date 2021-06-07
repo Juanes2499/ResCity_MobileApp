@@ -3,6 +3,7 @@ import {SafeAreaView, StyleSheet, Text, View, TextInput , Platform} from 'react-
 import Button from '../../Componentes/Button/Button';
 import { Poppins_300Light, Poppins_400Regular, Poppins_500Medium, Poppins_700Bold } from "@expo-google-fonts/poppins";
 import {InputBox} from '../../Componentes/Input/Input';
+import {Graphic} from '../../Componentes/Graphic/Graphic';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
 import {Card} from '../../Componentes/Card/Card';
 
@@ -276,17 +277,14 @@ class DatosScreen extends React.Component {
             }}
           />
 
-          <View  style={{width: "100%"}}>
-            <Text style={styles.titulo}>
-              Tarjeta de datos
-            </Text>
-          </View>
+            <View  style={{width: "100%"}}>
+                <Text style={styles.titulo}>
+                    Gráfica de datos
+                </Text>
+            </View>
 
           <View>
-            <Card
-              style={style_card}
-              elements={this.state.data}
-            />
+            <Graphic/>
           </View>
                 
         </View>
