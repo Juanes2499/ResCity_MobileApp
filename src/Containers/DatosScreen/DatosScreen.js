@@ -4,6 +4,7 @@ import Button from '../../Componentes/Button/Button';
 import { Poppins_300Light, Poppins_400Regular, Poppins_500Medium, Poppins_700Bold } from "@expo-google-fonts/poppins";
 import {InputBox} from '../../Componentes/Input/Input';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
+import {Card} from '../../Componentes/Card/Card';
 
 import PropTypes from "prop-types";
 import { withRouter } from "react-router";
@@ -93,6 +94,17 @@ const style_button_consultar = {
       fontFamily: 'Poppins_500Medium',
       color: "#F2F2F2",
       fontSize: 15
+  },
+}
+
+const style_card = {
+  container: {
+    width: '100%'
+  },
+  value: {
+      fontFamily: 'Poppins_300Light',
+      color: "#000",
+      fontSize: 12
   }
 }
 
@@ -162,9 +174,10 @@ class DatosScreen extends React.Component {
     ]
   }
 
-  NodoSensorText = (data) => {
-    console.log(data)
-    this.setState({text: data})
+  later(delay) {
+      return new Promise(function(resolve) {
+          setTimeout(resolve, delay);
+    });
   }
 
   render() {
@@ -172,24 +185,7 @@ class DatosScreen extends React.Component {
     const { match, location, history } = this.props;
     return (
       <KeyboardAwareScrollView>
-        <View style={styles.container}>
-
-          {/* <View style={{felex: 1, flexDirection: 'row'}}>
-            <View  style={{width: "27%"}}>
-              <Button
-                styleButton = {style_button_return}
-                handleAction = {() => {
-                  history.push("/")
-                }}
-              />
-            </View>
-
-            <View  style={{width: 300, display:'flex', justifyContent:'center'}}>
-              <Text style={styles.titulo}>
-                Tabla de datos
-              </Text>
-            </View>
-          </View> */}
+        <View style={styles.container}>      
 
           <View  style={{width: "27%"}}>
             <Button
@@ -271,7 +267,10 @@ class DatosScreen extends React.Component {
           />
 
           <View>
-
+            <Card
+              style={style_card}
+              elements={this.state.data}
+            />
           </View>
                 
         </View>

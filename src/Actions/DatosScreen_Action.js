@@ -4,7 +4,7 @@ import axios from 'axios';
 export const DatosNodoSensorAction_ConsultarDatos = (json) => {
 
     let data = {
-        "seleccionar":"ID_NODO_SENSOR,NOMBRE_VARIABLE,VALOR_DATO,VALOR_NOTIFICADO,FECHA_CREACION,HORA_CREACION",
+        "seleccionar":"",
         "condicion": json ? json : {},
         "agrupar":"",
         "ordenar":""
