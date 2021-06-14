@@ -5,15 +5,13 @@ import { Poppins_300Light, Poppins_400Regular, Poppins_500Medium, Poppins_700Bol
 import {InputBox} from '../../Componentes/Input/Input';
 import {Graphic} from '../../Componentes/Graphic/Graphic';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
-import {Card} from '../../Componentes/Card/Card';
 
-import PropTypes from "prop-types";
 import { withRouter } from "react-router";
 
 //Actions
 import { 
-  DatosNodoSensorAction_ConsultarDatos
-} from '../../Actions/DatosScreen_Action';
+  SubscribeScreenAction_Subscribe
+} from '../../Actions/SubscribeScreen_Action'
 
 
 const style_button_return = {
@@ -119,7 +117,7 @@ const style_card = {
   }
 }
 
-class DatosScreen extends React.Component {
+class SubscibeScreen extends React.Component {
 
   componentDidMount = async() => {
 
@@ -139,48 +137,63 @@ class DatosScreen extends React.Component {
   state = {
     text: '',
     data: [],
-    formFilter: [
+    formNew: [
       {
-        name: 'ID_NODO_SENSOR',
-        label: 'ID Nodo Sensor',
+        name: 'NOMBRES',
+        label: 'Nombres',
         type: 'input',
         valueState: '',
         handlerValueState: (data) =>{
-          let Emt_state = this.state.formFilter;
+          let Emt_state = this.state.formNew;
           Emt_state[0].valueState = data;
-          this.setState({formFilter: Emt_state});
+          this.setState({formNew: Emt_state});
           console.log(data)
         }
       },
       {
-        name: 'NOMBRE_VARIABLE',
-        label: 'Variable Nodo Sensor',
+        name: 'APELLIDOS',
+        label: 'Apellidos',
         valueState: '',
         type: 'input',
         handlerValueState: (data) =>{
-          let Emt_state = this.state.formFilter;
+          let Emt_state = this.state.formNew;
           Emt_state[1].valueState = data;
-          this.setState({formFilter: Emt_state});
+          this.setState({formNew: Emt_state});
           console.log(data)
         }
       },
       {
-        name: "FECHA_CREACION",
-        label: 'Fecha Reporte',
-        type: 'date',
-        hours_24: false,
-        valueState: new Date(),
-        mode:'date',
-        show: false,
-        handlerValueState: (event, selectedDate) => {
-          const currentDate = selectedDate; //|| Emt_state[2].valueState;
-          let Emt_state = this.state.formFilter;
-          Emt_state[2].valueState = currentDate;
-          Emt_state[2].show = false;
-          this.setState({formFilter: Emt_state});
-          console.log(currentDate)
+        name: "EDAD",
+        label: 'Edad',
+        type: 'input',
+        handlerValueState: (data) =>{
+          let Emt_state = this.state.formNew;
+          Emt_state[2].valueState = data;
+          this.setState({formNew: Emt_state});
+          console.log(data)
         }
-
+      },
+      {
+        name: "NUM_TELEFONO",
+        label: 'Número de Celular',
+        type: 'input',
+        handlerValueState: (data) =>{
+          let Emt_state = this.state.formNew;
+          Emt_state[3].valueState = data;
+          this.setState({formNew: Emt_state});
+          console.log(data)
+        }
+      },
+      {
+        name: "EMAIL",
+        label: 'Email',
+        type: 'input',
+        handlerValueState: (data) =>{
+          let Emt_state = this.state.formNew;
+          Emt_state[4].valueState = data;
+          this.setState({formNew: Emt_state});
+          console.log(data)
+        }
       },
     ]
   }
@@ -210,90 +223,53 @@ class DatosScreen extends React.Component {
 
           <View  style={{width: "100%"}}>
             <Text style={styles.titulo}>
-              Filtro de datos
+              Datos Personales
             </Text>
           </View>
 
           <View style={{width: '100%', display:'flex', alignContent:'center'}}>
-            
               <InputBox
                 style={style_input_box}
-                elements={this.state.formFilter}
+                elements={this.state.formNew}
               />
-              <Button
-                label = {'Seleccionar Fecha'}
-                styleButton = {style_button_date}
-                handleAction = {() => {
-                  let Emt_state = this.state.formFilter;
-                  Emt_state[2].show = true;
-                  this.setState({formFilter: Emt_state});
-                }}
-              />
-            
           </View>
 
           <Button
-            label = {'Consultar Datos'}
+            label = {'Suscribirse'}
             styleButton = {style_button_consultar}
             handleAction = {() => {
 
               let dataJsonObject = {}
                 
-              let newFormFilter = this.state.formFilter;
+              let newformNew = this.state.formNew;
               
-              let i = 0;
-              newFormFilter.forEach(x => {
-                  if(x.valueState !== ''){
+              let nullFields = [];
 
-                      let valor_cond = '';
-                      if( x.name === 'FECHA_CREACION'){
-                        let anio = x.valueState.getFullYear()
-                        let mes = x.valueState.getMonth()+1
-                        mes = mes.toString().padStart(2, '0')
-                        let dia = x.valueState.getDate()
-                        dia = dia.toString().padStart(2, '0')
-                        valor_cond = `${anio}-${mes}-${dia}`
-                        console.log(valor_cond)
-                      }else if ( x.name !== 'FECHA_CREACION'){
-                        valor_cond = x.valueState
-                      }
-
-                      dataJsonObject[`${x.name}`] = {
-                          conector_logico: i === 0 ? '' : "AND",
-                          operador: 'LIKE',
-                          valor_condicion: `%${valor_cond}%`
-                      }
-                      i += 1;
-                  }
+              newformNew.forEach(x => {
+                if (x.valueState === ''){
+                  nullFields.push(x.label)
+                }else{
+                  dataJsonObject[`${x.name.toLowerCase()}`] = x.valueState
+                }
               })
           
-              DatosNodoSensorAction_ConsultarDatos(dataJsonObject)
+              SubscribeScreenAction_Subscribe(dataJsonObject)
                   .then(result => {
-                      this.setState({data: result.data.map((a, indice) => ({ ...a, id: indice + 1 }))})
-                      console.log(this.state.data)
+                      if(result){
+                        alert('Usuario registrado')
+                      }
                   }).catch((err) => {
-                      alert('No existen conincidencias con las condiciones establecidas en los parámetros.')
+                      alert('No se ha podido registrar el usuario')
                   })
             }}
-          />
-
-            <View  style={{width: "100%"}}>
-                <Text style={styles.titulo}>
-                    Gráfica de datos
-                </Text>
-            </View>
-
-          <View>
-            <Graphic/>
-          </View>
-                
+          />           
         </View>
       </KeyboardAwareScrollView>
     );
   }
 }
 
-export default withRouter(DatosScreen);
+export default withRouter(SubscibeScreen);
 
 const styles = StyleSheet.create({
   container: {

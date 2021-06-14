@@ -58,10 +58,10 @@ class App extends React.Component {
       },
       { 
         id: '2', 
-        label: 'Gráfica de datos', 
+        label: 'Suscribirme', 
         img: img_grafica,
         handleAction: () =>{
-          history.push("/GraficosScreen")
+          history.push("/SubscribeScreen")
         }
       },
     ]

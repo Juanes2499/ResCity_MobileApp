@@ -11,7 +11,7 @@ export const DatosNodoSensorAction_ConsultarDatos = (json) => {
         "limite": "5"
     }
 
-    const endpoint = 'http://192.168.0.17:3010/api/datosNodoSensor/get'
+    const endpoint = 'http://192.168.20.21:3010/api/datosNodoSensor/get'
 
     console.log(data)
 

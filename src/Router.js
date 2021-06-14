@@ -4,7 +4,7 @@ import {NativeRouter, Route, Switch, Router, Redirect } from "react-router-nativ
 
 import Home from "./Containers/Home/Home";
 import DatosScreen from ".//Containers/DatosScreen/DatosScreen";
-import GraficosScreen from './Containers/GraficosScreen/GraficosScreen';
+import SubscibeScreen from './Containers/SubscibeScreen/SubscibeScreen';
 
 export default function MessageRouteScreen(){
   return (
@@ -13,7 +13,7 @@ export default function MessageRouteScreen(){
         <Switch>
           <Route exact path="/" component={Home}/>
           <Route exact path="/DatosScreen" component={DatosScreen}/>
-          <Route exact path="/GraficosScreen" component={GraficosScreen}/>
+          <Route exact path="/SubscribeScreen" component={SubscibeScreen}/>
           <Redirect to ="/"/>
         </Switch>
       </View>
