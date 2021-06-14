@@ -4,7 +4,8 @@ import { StyleSheet, Text, View, ActivityIndicator} from 'react-native';
 import { Poppins_300Light, Poppins_500Medium, Poppins_700Bold } from "@expo-google-fonts/poppins";
 import * as Font from 'expo-font';
 import image from '../../Imagenes/Analisis_datos.jpg'
-import img_grafica from '../../Imagenes/grafica_datos.png';
+import img_grafica from '../../Imagenes/grafica_datos.png'; 
+import ContactUs from '../../Imagenes/ContactUs.jpg';
 
 import PropTypes from "prop-types";
 import { withRouter } from "react-router";
@@ -62,6 +63,14 @@ class App extends React.Component {
         img: img_grafica,
         handleAction: () =>{
           history.push("/SubscribeScreen")
+        }
+      },
+      { 
+        id: '3', 
+        label: 'Contactenos', 
+        img: ContactUs,
+        handleAction: () =>{
+          history.push("/ContactScreen")
         }
       },
     ]
